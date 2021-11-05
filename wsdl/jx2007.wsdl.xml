@@ -327,7 +327,7 @@
         <port
                 name="JXMSTransferSoap"
                 binding="s0:JXMSTransferSoap">
-            <soap:address location="SOAP_ADDRESS_LOCATION" />
+            <soap:address location="Please specify :endpoint option" />
         </port>
     </service>
 </definitions>
