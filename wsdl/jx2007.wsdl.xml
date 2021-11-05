@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JX 手順 WSDL 2008 年 3 月版 -->
+<definitions
+        xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:s="http://www.w3.org/2001/XMLSchema"
+        xmlns:s0="http://www.dsri.jp/edi-bp/2004/jedicos-xml/client-server"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+        targetNamespace="http://www.dsri.jp/edi-bp/2004/jedicos-xml/client-server"
+        xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types>
+        <s:schema
+                elementFormDefault="qualified"
+                targetNamespace="http://www.dsri.jp/edi-bp/2004/jedicosxml/client-server">
+            <s:element name="PutDocument">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="messageId"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="data"
+                                type="s:base64Binary" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="senderId"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="receiverId"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="formatType"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="documentType"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="compressType"
+                                type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="PutDocumentResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="PutDocumentResult"
+                                type="s:boolean" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element
+                    name="MessageHeader"
+                    type="s0:MessageHeader" />
+            <s:complexType name="MessageHeader">
+                <s:sequence>
+                    <s:element
+                            minOccurs="1"
+                            maxOccurs="1"
+                            name="From"
+                            type="s:string" />
+                    <s:element
+                            minOccurs="1"
+                            maxOccurs="1"
+                            name="To"
+                            type="s:string" />
+                    <s:element
+                            minOccurs="1"
+                            maxOccurs="1"
+                            name="MessageId"
+                            type="s:string" />
+                    <s:element
+                            minOccurs="1"
+                            maxOccurs="1"
+                            name="Timestamp"
+                            type="s:string" />
+                    <s:element
+                            minOccurs="0"
+                            maxOccurs="1"
+                            name="OptionalFormatType"
+                            type="s:string" />
+                    <s:element
+                            minOccurs="0"
+                            maxOccurs="1"
+                            name="OptionalDocumentType"
+                            type="s:string" />
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetDocument">
+                27
+                <s:complexType>
+                    <s:sequence>
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="receiverId"
+                                type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetDocumentResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="GetDocumentResult"
+                                type="s:boolean" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="messageId"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="data"
+                                type="s:base64Binary" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="senderId"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="receiverId"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="formatType"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="documentType"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="compressType"
+                                type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ConfirmDocument">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="messageId"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="senderId"
+                                type="s:string" />
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="receiverId"
+                                type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ConfirmDocumentResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element
+                                minOccurs="1"
+                                maxOccurs="1"
+                                name="ConfirmDocumentResult"
+                                type="s:boolean" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+        </s:schema>
+    </types>
+    <message name="PutDocumentSoapIn">
+        <part
+                name="parameters"
+                element="s0:PutDocument" />
+    </message>
+    <message name="PutDocumentSoapOut">
+        <part
+                name="parameters"
+                element="s0:PutDocumentResponse" />
+    </message>
+    <message name="PutDocumentMessageHeader">
+        <part
+                name="MessageHeader"
+                element="s0:MessageHeader" />
+    </message>
+    <message name="GetDocumentSoapIn">
+        <part
+                name="parameters"
+                element="s0:GetDocument" />
+    </message>
+    28
+    <message name="GetDocumentSoapOut">
+        <part
+                name="parameters"
+                element="s0:GetDocumentResponse" />
+    </message>
+    <message name="GetDocumentMessageHeader">
+        <part
+                name="MessageHeader"
+                element="s0:MessageHeader" />
+    </message>
+    <message name="ConfirmDocumentSoapIn">
+        <part
+                name="parameters"
+                element="s0:ConfirmDocument" />
+    </message>
+    <message name="ConfirmDocumentSoapOut">
+        <part
+                name="parameters"
+                element="s0:ConfirmDocumentResponse" />
+    </message>
+    <message name="ConfirmDocumentMessageHeader">
+        <part
+                name="MessageHeader"
+                element="s0:MessageHeader" />
+    </message>
+    <portType name="JXMSTransferSoap">
+        <operation name="PutDocument">
+            <documentation>ドキュメントの送信(Client To Server)</documentation>
+            <input message="s0:PutDocumentSoapIn" />
+            <output message="s0:PutDocumentSoapOut" />
+        </operation>
+        <operation name="GetDocument">
+            <documentation>ドキュメントの受信(Client From Server)</documentation>
+            <input message="s0:GetDocumentSoapIn" />
+            <output message="s0:GetDocumentSoapOut" />
+        </operation>
+        <operation name="ConfirmDocument">
+            <documentation>ドキュメントの受信確認</documentation>
+            <input message="s0:ConfirmDocumentSoapIn" />
+            <output message="s0:ConfirmDocumentSoapOut" />
+        </operation>
+    </portType>
+    <binding
+            name="JXMSTransferSoap"
+            type="s0:JXMSTransferSoap">
+        <soap:binding
+                transport="http://schemas.xmlsoap.org/soap/http"
+                style="document" />
+        <operation name="PutDocument">
+            <soap:operation
+                    soapAction="http://www.dsri.jp/edi-bp/2004/jedicos-xml/client-server/PutDocument"
+                    style="document" />
+            <input>
+                <soap:body use="literal" />
+                <soap:header
+                        message="s0:PutDocumentMessageHeader"
+                        part="MessageHeader"
+                        use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+                <soap:header
+                        message="s0:PutDocumentMessageHeader"
+                        part="MessageHeader"
+                        use="literal" />
+            </output>
+        </operation>
+        <operation name="GetDocument">
+            <soap:operation
+                    soapAction="http://www.dsri.jp/edi-bp/2004/jedicos-xml/client-server/GetDocument"
+                    style="document" />
+            <input>
+                <soap:body use="literal" />
+                <soap:header
+                        message="s0:GetDocumentMessageHeader"
+                        part="MessageHeader"
+                        use="literal" />
+            </input>
+            29
+            <output>
+                <soap:body use="literal" />
+                <soap:header
+                        message="s0:GetDocumentMessageHeader"
+                        part="MessageHeader"
+                        use="literal" />
+            </output>
+        </operation>
+        <operation name="ConfirmDocument">
+            <soap:operation
+                    soapAction="http://www.dsri.jp/edi-bp/2004/jedicos-xml/clientserver/ConfirmDocument"
+                    style="document" />
+            <input>
+                <soap:body use="literal" />
+                <soap:header
+                        message="s0:ConfirmDocumentMessageHeader"
+                        part="MessageHeader"
+                        use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+                <soap:header
+                        message="s0:ConfirmDocumentMessageHeader"
+                        part="MessageHeader"
+                        use="literal" />
+            </output>
+        </operation>
+    </binding>
+    <service name="JXMSTransfer">
+        <documentation>JX 手順メッセージ転送サービス</documentation>
+        <port
+                name="JXMSTransferSoap"
+                binding="s0:JXMSTransferSoap">
+            <soap:address location="SOAP_ADDRESS_LOCATION" />
+        </port>
+    </service>
+</definitions>
