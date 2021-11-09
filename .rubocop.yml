@@ -1,5 +1,9 @@
 AllCops:
   TargetRubyVersion: 2.6
+  NewCops: enable
 
 inherit_gem:
   rubocop-shopify: rubocop.yml
+require:
+  - rubocop-minitest
+  - rubocop-rake
