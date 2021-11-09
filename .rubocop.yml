@@ -5,5 +5,10 @@ AllCops:
 inherit_gem:
   rubocop-shopify: rubocop.yml
 require:
-  - rubocop-minitest
+  - rubocop-rspec
   - rubocop-rake
+
+RSpec/DescribedClass:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
