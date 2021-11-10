@@ -41,7 +41,7 @@ client.put_document do |op|
     format_type: "SecondGenEDI",
     document_type: "Order",
   )
-  PutDocumentStore.mark_sending(op.sent_options)
+  MyPutDocumentStore.mark_sending(op.sent_options)
   count = 0
   begin
     count += 1
@@ -50,7 +50,7 @@ client.put_document do |op|
     retry if count < 4
     raise
   end
-  PutDocumentStore.mark_sent(op.sent_options)
+  MyPutDocumentStore.mark_sent(op.sent_options)
 end
 
 result = client.get_document do |op|
@@ -66,9 +66,9 @@ result = client.get_document do |op|
     retry if count < 4
     raise
   end
-  GetDocumentStore.mark_received(op.response.result)
-  App.receive_document(op.response.result)
-  GetDocumentStore.mark_app_processed(op.response.result)
+  MyGetDocumentStore.mark_received(op.response.result)
+  MyApp.receive_document(op.response.result)
+  MyGetDocumentStore.mark_app_processed(op.response.result)
   op.response.result
 end
 
