@@ -85,7 +85,7 @@ class JxClient
   # @yieldparam operation [JxClient::PutDocument]
   def put_document
     PutDocument.from_jx_client(self).tap do |operation|
-      return yield operation if block_given?
+      yield operation if block_given?
     end
   end
 
@@ -94,7 +94,7 @@ class JxClient
   # @yieldparam operation [JxClient::GetDocument]
   def get_document # rubocop:disable Naming/AccessorMethodName
     GetDocument.from_jx_client(self).tap do |operation|
-      return yield operation if block_given?
+      yield operation if block_given?
     end
   end
 
@@ -103,7 +103,7 @@ class JxClient
   # @yieldparam operation [JxClient::ConfirmDocument]
   def confirm_document
     ConfirmDocument.from_jx_client(self).tap do |operation|
-      return yield operation if block_given?
+      yield operation if block_given?
     end
   end
 end

@@ -171,8 +171,8 @@ RSpec.describe(JxClient) do
           op.options(options)
           expect(op.sent_locals).to(eq(expected_options))
           op.call
-          op.response
         end
+          .response
 
         expect(response).to(be_success)
         expect(response.result).to(eq(true))
@@ -233,8 +233,8 @@ RSpec.describe(JxClient) do
           op.options(options)
           expect(op.sent_locals).to(eq(expected_options))
           op.call
-          op.response
         end
+          .response
 
         expect(response).to(be_success)
         expect(response.result.decoded_data).to(eq("data"))
@@ -299,8 +299,8 @@ RSpec.describe(JxClient) do
           op.options(options)
           expect(op.sent_locals).to(eq(expected_options))
           op.call
-          op.response
         end
+          .response
 
         expect(response).to(be_success)
         expect(response.result).to(eq(true))

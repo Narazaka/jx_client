@@ -54,7 +54,7 @@ client.put_document do |op|
   MyPutDocumentStore.mark_sent(op.sent_options)
 end
 
-result = client.get_document do |op|
+get_document = client.get_document do |op|
   op.options(
     to: "receiver.example.com",
     receiver_id: "10001",
@@ -70,7 +70,6 @@ result = client.get_document do |op|
   MyGetDocumentStore.mark_received(op.response.result)
   MyApp.receive_document(op.response.result)
   MyGetDocumentStore.mark_app_processed(op.response.result)
-  op.response.result
 end
 
 client.confirm_document do |op|
@@ -78,7 +77,7 @@ client.confirm_document do |op|
     to: "receiver.example.com",
     sender_id: "10001",
     receiver_id: "10002",
-    message_id: result.message_id,
+    message_id: get_document.result.message_id,
   )
   count = 0
   begin
