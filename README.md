@@ -30,6 +30,7 @@ client = JxClient.new(
   jx_default_options: {
     from: "sender.example.com",
   },
+  endpoint: "receiver.example.com", # Savon options
 )
 
 client.put_document do |op|
