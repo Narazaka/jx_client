@@ -1,8 +1,6 @@
 # JxClient
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/jx_client`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+日本におけるインターネットEDI（電子データ交換）において利用されるJX手順通信ライブラリ
 
 ## Installation
 
@@ -22,7 +20,75 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require "jx_client"
+
+client = JxClient.new(
+  jx_version: 2007,
+  jx_message_id_generate: -> { "#{SecureRandom.hex}@example.com" },
+  jx_timestamp_generate: true,
+  jx_default_options: {
+    from: "sender.example.com",
+  },
+)
+
+client.put_document do |op|
+  op.options(
+    to: "receiver.example.com",
+    data: "123,なにか,456\n",
+    sender_id: "10001",
+    receiver_id: "10002",
+    format_type: "SecondGenEDI",
+    document_type: "Order",
+  )
+  PutDocumentStore.mark_sending(op.sent_options)
+  count = 0
+  begin
+    count += 1
+    op.call
+  rescue Savon::Error
+    retry if count < 4
+    raise
+  end
+  PutDocumentStore.mark_sent(op.sent_options)
+end
+
+result = client.get_document do |op|
+  op.options(
+    to: "receiver.example.com",
+    receiver_id: "10001",
+  )
+  count = 0
+  begin
+    count += 1
+    op.call
+  rescue Savon::Error
+    retry if count < 4
+    raise
+  end
+  GetDocumentStore.mark_received(op.response.result)
+  App.receive_document(op.response.result)
+  GetDocumentStore.mark_app_processed(op.response.result)
+  op.response.result
+end
+
+client.confirm_document do |op|
+  op.options(
+    to: "receiver.example.com",
+    sender_id: "10001",
+    receiver_id: "10002",
+    message_id: result.message_id,
+  )
+  count = 0
+  begin
+    count += 1
+    op.call
+  rescue Savon::Error
+    retry if count < 4
+    raise
+  end
+end
+```
 
 ## Development
 
@@ -32,4 +98,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/jx_client.
+Bug reports and pull requests are welcome on GitHub at https://github.com/Narazaka/jx_client.
