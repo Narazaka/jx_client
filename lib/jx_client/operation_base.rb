@@ -2,7 +2,7 @@
 
 class JxClient
   class OperationBase
-    attr_reader :sent_options
+    attr_reader :sent_options, :response
 
     # @param operation_name [Symbol] operation name
     # @param client [Savon::Client] client
@@ -37,7 +37,8 @@ class JxClient
 
     # call operation
     def call
-      @client.call(@operation_name, sent_locals)
+      @response = wrap_response(@client.call(@operation_name, sent_locals))
+      self
     end
 
     # merge options, default options and operation specific default options
@@ -61,6 +62,11 @@ class JxClient
     # @return [String] new message id
     def new_message_id
       @message_id_generate.call
+    end
+
+    # wraps response
+    def wrap_response(response)
+      response
     end
   end
 end

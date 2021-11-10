@@ -127,7 +127,7 @@ RSpec.describe(JxClient) do
 
         # call the service
         client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
-        response = client.put_document.options(options).call
+        response = client.put_document.options(options).call.response
 
         expect(response).to(be_success)
         expect(response.result).to(eq(true))
@@ -141,7 +141,9 @@ RSpec.describe(JxClient) do
         client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
         response = client.put_document do |op|
           op.options(options)
+          expect(op.sent_locals).to(eq(expected_options))
           op.call
+          op.response
         end
 
         expect(response).to(be_success)
@@ -187,7 +189,7 @@ RSpec.describe(JxClient) do
 
         # call the service
         client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
-        response = client.get_document.options(options).call
+        response = client.get_document.options(options).call.response
 
         expect(response).to(be_success)
         expect(response.result.decoded_data).to(eq("data"))
@@ -201,7 +203,9 @@ RSpec.describe(JxClient) do
         client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
         response = client.get_document do |op|
           op.options(options)
+          expect(op.sent_locals).to(eq(expected_options))
           op.call
+          op.response
         end
 
         expect(response).to(be_success)
@@ -251,7 +255,7 @@ RSpec.describe(JxClient) do
 
         # call the service
         client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
-        response = client.confirm_document.options(options).call
+        response = client.confirm_document.options(options).call.response
 
         expect(response).to(be_success)
         expect(response.result).to(eq(true))
@@ -265,7 +269,9 @@ RSpec.describe(JxClient) do
         client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
         response = client.confirm_document do |op|
           op.options(options)
+          expect(op.sent_locals).to(eq(expected_options))
           op.call
+          op.response
         end
 
         expect(response).to(be_success)

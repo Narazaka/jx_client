@@ -14,8 +14,7 @@ class JxClient
       )
     end
 
-    def call
-      response = super
+    def wrap_response(response)
       response.define_singleton_method(:result) do
         body[:put_document_response][:put_document_result]
       end
