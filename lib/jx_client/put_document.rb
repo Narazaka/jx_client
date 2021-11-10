@@ -11,6 +11,7 @@ class JxClient
         default_options: jx_client.jx_default_options,
         operation_default_options: jx_client.jx_default_put_document_options,
         message_id_generate: jx_client.jx_message_id_generate,
+        timestamp_generate: jx_client.jx_timestamp_generate,
       )
     end
 

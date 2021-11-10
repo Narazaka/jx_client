@@ -8,19 +8,22 @@ class JxClient
     # @param client [Savon::Client] client
     # @param default_options [Hash] default options
     # @param operation_default_options [Hash] operation specific default options
-    # @param message_id_generate [Proc] message id generator
+    # @param message_id_generate [Proc | Boolean] message id generator
+    # @param timestamp_generate [Proc | Boolean] timestamp generator
     def initialize(
       operation_name:,
       client:,
       default_options: {},
       operation_default_options: {},
-      message_id_generate: -> { SecureRandom.uuid }
+      message_id_generate: false,
+      timestamp_generate: false
     )
       @operation_name = operation_name
       @client = client
       @default_options = default_options
       @operation_default_options = operation_default_options
-      @message_id_generate = message_id_generate
+      @message_id_generate = message_id_generate == true ? -> { SecureRandom.uuid } : message_id_generate
+      @timestamp_generate = timestamp_generate == true ? -> { Time.now.utc.iso8601 } : timestamp_generate
     end
 
     # @return [Hash] sent locals for savon call
@@ -43,7 +46,7 @@ class JxClient
 
     # merge options, default options and operation specific default options
     def merge_options(options)
-      with_message_id(@default_options.merge(@operation_default_options, options))
+      with_generated(@default_options.merge(@operation_default_options, options))
     end
 
     # @param options [Hash] options
@@ -54,14 +57,21 @@ class JxClient
 
     # @param options [Hash] options
     # @return [Hash] options with :message_id
-    def with_message_id(options)
+    def with_generated(options)
       options[:message_id] ||= new_message_id
+      options[:timestamp] ||= new_timestamp
       options
     end
 
     # @return [String] new message id
     def new_message_id
+      raise "message_id must be included because message ID generation is disabled." unless @message_id_generate
       @message_id_generate.call
+    end
+
+    def new_timestamp
+      raise "timestamp must be included because timestamp generation is disabled." unless @timestamp_generate
+      @timestamp_generate.call
     end
 
     # wraps response

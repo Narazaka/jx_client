@@ -36,11 +36,13 @@ class JxClient
     :jx_default_put_document_options,
     :jx_default_get_document_options,
     :jx_default_confirm_document_options,
-    :jx_message_id_generate
+    :jx_message_id_generate,
+    :jx_timestamp_generate
 
   # @param options [Hash]
   # @option options [2004 | 2007] :jx_version JX手順のバージョン
-  # @option options [Proc] :jx_message_id_generate メッセージID生成Proc
+  # @option options [Proc | Boolean] :jx_message_id_generate メッセージID生成 (true: デフォルト, false: 無効, Proc: カスタム生成)
+  # @option options [Proc | Boolean] :jx_timestamp_generate timestamp生成 (true: デフォルト, false: 無効, Proc: カスタム生成)
   # @option options [Hash] :jx_default_options デフォルトオプション
   # @option options [Hash] :jx_default_put_document_options PutDocumentのデフォルトオプション
   # @option options [Hash] :jx_default_get_document_options GetDocumentのデフォルトオプション
@@ -50,6 +52,7 @@ class JxClient
     @savon_client_options = DEFAULT_OPTIONS.merge(options)
     @jx_version = @savon_client_options.delete(:jx_version) || 2007
     @jx_message_id_generate = @savon_client_options.delete(:jx_message_id_generate)
+    @jx_timestamp_generate = @savon_client_options.delete(:jx_timestamp_generate)
     @jx_default_options = @savon_client_options.delete(:jx_default_options) || {}
     @jx_default_put_document_options = @savon_client_options.delete(:jx_default_put_document_options) || {}
     @jx_default_get_document_options = @savon_client_options.delete(:jx_default_get_document_options) || {}

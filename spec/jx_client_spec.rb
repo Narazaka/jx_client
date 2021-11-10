@@ -30,8 +30,32 @@ RSpec.describe(JxClient) do
       expect(JxClient.new(jx_version: 2007).client.wsdl.document).to(eq(JxClient.wsdl(version: 2007)))
     end
 
-    it "initialize message id generation" do
-      expect(JxClient.new(jx_message_id_generate: -> { "aaaa" }).put_document.new_message_id).to(eq("aaaa"))
+    describe "jx_message_id_generate" do
+      it "Proc" do
+        expect(JxClient.new(jx_message_id_generate: -> { "aaaa" }).put_document.new_message_id).to(eq("aaaa"))
+      end
+
+      it "true" do
+        expect(JxClient.new(jx_message_id_generate: true).put_document.new_message_id).to(be_a(String))
+      end
+
+      it "none" do
+        expect(-> { JxClient.new.put_document.new_message_id }).to(raise_error(/message_id must be included/))
+      end
+    end
+
+    describe "jx_timestamp_generate" do
+      it "Proc" do
+        expect(JxClient.new(jx_timestamp_generate: -> { "21:21" }).put_document.new_timestamp).to(eq("21:21"))
+      end
+
+      it "true" do
+        expect(JxClient.new(jx_timestamp_generate: true).put_document.new_timestamp).to(be_a(String))
+      end
+
+      it "none" do
+        expect(-> { JxClient.new.put_document.new_timestamp }).to(raise_error(/timestamp must be included/))
+      end
     end
   end
 
@@ -41,9 +65,10 @@ RSpec.describe(JxClient) do
         JxClient.new(
           jx_version: 2007,
           jx_message_id_generate: -> { "id" },
+          jx_timestamp_generate: -> { "time" },
           jx_default_options: { from: "1234" }
         ).put_document.options(to: "5678").sent_options
-      ).to(eq({ from: "1234", to: "5678", message_id: "id" }))
+      ).to(eq({ from: "1234", to: "5678", message_id: "id", timestamp: "time" }))
     end
   end
 
@@ -53,10 +78,11 @@ RSpec.describe(JxClient) do
         JxClient.new(
           jx_version: 2007,
           jx_message_id_generate: -> { "id" },
+          jx_timestamp_generate: -> { "time" },
           jx_default_options: { from: "1234" },
           jx_default_put_document_options: { sender_id: "90" }
         ).put_document.options(to: "5678").sent_options
-      ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id" }))
+      ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id", timestamp: "time" }))
     end
 
     it "get_document applyed" do
@@ -64,10 +90,11 @@ RSpec.describe(JxClient) do
         JxClient.new(
           jx_version: 2007,
           jx_message_id_generate: -> { "id" },
+          jx_timestamp_generate: -> { "time" },
           jx_default_options: { from: "1234" },
           jx_default_get_document_options: { sender_id: "90" }
         ).get_document.options(to: "5678").sent_options
-      ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id" }))
+      ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id", timestamp: "time" }))
     end
 
     it "confirm_document applyed" do
@@ -75,10 +102,11 @@ RSpec.describe(JxClient) do
         JxClient.new(
           jx_version: 2007,
           jx_message_id_generate: -> { "id" },
+          jx_timestamp_generate: -> { "time" },
           jx_default_options: { from: "1234" },
           jx_default_confirm_document_options: { sender_id: "90" }
         ).confirm_document.options(to: "5678").sent_options
-      ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id" }))
+      ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id", timestamp: "time" }))
     end
   end
 
