@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope
+        xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Header>
+        <MessageHeader xmlns="http://www.dsri.jp/edi-bp/2004/jedicos-xml/client-server">
+            <From>svruri.co.jp</From>
+            <To>cliuri.co.jp</To>
+            <MessageId>20040313123819@svruri.co.jp</MessageId>
+            <Timestamp>2004-03-13T12:38:19</Timestamp>
+        </MessageHeader>
+    </soap:Header>
+    <soap:Body>
+        <GetDocumentResponse xmlns="http://www.dsri.jp/edi-bp/2004/jedicos-xml/client-server">
+            <GetDocumentResult>true</GetDocumentResult>
+            <messageId>20040313123819@svruri.co.jp</messageId>
+            <data>ZGF0YQ==</data>
+            <senderId>4969951110016</senderId>
+            <receiverId>4912345000019</receiverId>
+            <formatType>SecondGenEDI</formatType>
+            <documentType>Order</documentType>
+        </GetDocumentResponse>
+    </soap:Body>
+</soap:Envelope>

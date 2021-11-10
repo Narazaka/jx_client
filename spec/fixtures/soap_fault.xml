@@ -1,0 +1,20 @@
+<SOAP-ENV:Envelope
+        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+        SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    <SOAP-ENV:Header>
+        <MessageHeader xmlns="http://www.dsri.jp/edi-bp/2004/jedicos-xml/client-server">
+            <From>svruri.co.jp</From>
+            <To>cliuri.co.jp</To>
+            <MessageId>20040313123817@svruri.co.jp</MessageId>
+            <Timestamp>2004-03-13T12:38:17</Timestamp>
+        </MessageHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <SOAP-ENV:Fault>
+            <faultcode>SOAP-ENV:Server</faultcode>
+            <faultstring>internal server error</faultstring>
+            <faultactor>http://www.example.com/</faultactor>
+            <detail>detail</detail>
+        </SOAP-ENV:Fault>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

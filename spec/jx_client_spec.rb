@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
-require "savon/mock/spec_helper"
+require_relative "./savon_spec_helper"
 
 RSpec.describe(JxClient) do
+  include Savon::SpecHelper
+
+  before(:all) { savon.mock! }
+
+  after(:all) { savon.unmock! }
+
   describe "version" do
     it "is defined" do
       expect(JxClient::VERSION).to(be_a(String))
@@ -25,7 +31,7 @@ RSpec.describe(JxClient) do
     end
 
     it "initialize message id generation" do
-      expect(JxClient.new(jx_message_id_generate: -> { "aaaa" }).new_message_id).to(eq("aaaa"))
+      expect(JxClient.new(jx_message_id_generate: -> { "aaaa" }).put_document.new_message_id).to(eq("aaaa"))
     end
   end
 
@@ -36,7 +42,7 @@ RSpec.describe(JxClient) do
           jx_version: 2007,
           jx_message_id_generate: -> { "id" },
           jx_default_options: { from: "1234" }
-        ).merge_put_document_options(to: "5678")
+        ).put_document.options(to: "5678").sent_options
       ).to(eq({ from: "1234", to: "5678", message_id: "id" }))
     end
   end
@@ -49,7 +55,7 @@ RSpec.describe(JxClient) do
           jx_message_id_generate: -> { "id" },
           jx_default_options: { from: "1234" },
           jx_default_put_document_options: { sender_id: "90" }
-        ).merge_put_document_options(to: "5678")
+        ).put_document.options(to: "5678").sent_options
       ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id" }))
     end
 
@@ -60,7 +66,7 @@ RSpec.describe(JxClient) do
           jx_message_id_generate: -> { "id" },
           jx_default_options: { from: "1234" },
           jx_default_get_document_options: { sender_id: "90" }
-        ).merge_get_document_options(to: "5678")
+        ).get_document.options(to: "5678").sent_options
       ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id" }))
     end
 
@@ -71,8 +77,209 @@ RSpec.describe(JxClient) do
           jx_message_id_generate: -> { "id" },
           jx_default_options: { from: "1234" },
           jx_default_confirm_document_options: { sender_id: "90" }
-        ).merge_confirm_document_options(to: "5678")
+        ).confirm_document.options(to: "5678").sent_options
       ).to(eq({ from: "1234", to: "5678", sender_id: "90", message_id: "id" }))
+    end
+  end
+
+  describe "SOAP call" do
+    let(:soap_fault) { File.read("spec/fixtures/soap_fault.xml") }
+    let(:now) { Time.now }
+    let(:jx_message_id_generate) { -> { "id" } }
+
+    describe "#put_document" do
+      let(:response_document) { File.read("spec/fixtures/put_document_response.xml") }
+      let(:expected_options) do
+        {
+          message: {
+            messageId: "id",
+            data: "ZGF0YQ==",
+            senderId: "789",
+            receiverId: "012",
+            formatType: "myformat",
+            documentType: "mytype",
+            compressType: "none",
+          }, soap_header: {
+            From: "123",
+            To: "456",
+            MessageId: "id",
+            Timestamp: now,
+          },
+        }
+      end
+      let(:options) do
+        {
+          from: "123",
+          to: "456",
+          timestamp: now,
+          data: "data",
+          sender_id: "789",
+          receiver_id: "012",
+          format_type: "myformat",
+          document_type: "mytype",
+          compress_type: "none",
+        }
+      end
+
+      it "正常系" do
+        # set up an expectation
+        savon.expects(:put_document).with(expected_options).returns(response_document)
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        response = client.put_document.options(options).call
+
+        expect(response).to(be_success)
+        expect(response.result).to(eq(true))
+      end
+
+      it "正常系 with block" do
+        # set up an expectation
+        savon.expects(:put_document).with(expected_options).returns(response_document)
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        response = client.put_document do |op|
+          op.options(options)
+          op.call
+        end
+
+        expect(response).to(be_success)
+        expect(response.result).to(eq(true))
+      end
+
+      it "異常系" do
+        # set up an expectation
+        savon.expects(:put_document).with(expected_options).returns({ code: 500, headers: {}, body: soap_fault })
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        expect(-> { client.put_document.options(options).call }).to(raise_error(Savon::SOAPFault))
+      end
+    end
+
+    describe "#get_document" do
+      let(:response_document) { File.read("spec/fixtures/get_document_response.xml") }
+      let(:expected_options) do
+        {
+          message: {
+            receiverId: "012",
+          }, soap_header: {
+            From: "123",
+            To: "456",
+            MessageId: "id",
+            Timestamp: now,
+          },
+        }
+      end
+      let(:options) do
+        {
+          from: "123",
+          to: "456",
+          timestamp: now,
+          receiver_id: "012",
+        }
+      end
+
+      it "正常系" do
+        # set up an expectation
+        savon.expects(:get_document).with(expected_options).returns(response_document)
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        response = client.get_document.options(options).call
+
+        expect(response).to(be_success)
+        expect(response.result.decoded_data).to(eq("data"))
+      end
+
+      it "正常系 with block" do
+        # set up an expectation
+        savon.expects(:get_document).with(expected_options).returns(response_document)
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        response = client.get_document do |op|
+          op.options(options)
+          op.call
+        end
+
+        expect(response).to(be_success)
+        expect(response.result.decoded_data).to(eq("data"))
+      end
+
+      it "異常系" do
+        # set up an expectation
+        savon.expects(:get_document).with(expected_options).returns({ code: 500, headers: {}, body: soap_fault })
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        expect(-> { client.get_document.options(options).call }).to(raise_error(Savon::SOAPFault))
+      end
+    end
+
+    describe "#confirm_document" do
+      let(:response_document) { File.read("spec/fixtures/confirm_document_response.xml") }
+      let(:expected_options) do
+        {
+          soap_header: {
+            From: "123",
+            To: "456",
+            MessageId: "id",
+            Timestamp: now,
+          },
+          message: {
+            messageId: "id",
+            senderId: "789",
+            receiverId: "012",
+          },
+        }
+      end
+      let(:options) do
+        {
+          from: "123",
+          to: "456",
+          timestamp: now,
+          receiver_id: "012",
+          sender_id: "789",
+        }
+      end
+
+      it "正常系" do
+        # set up an expectation
+        savon.expects(:confirm_document).with(expected_options).returns(response_document)
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        response = client.confirm_document.options(options).call
+
+        expect(response).to(be_success)
+        expect(response.result).to(eq(true))
+      end
+
+      it "正常系 with block" do
+        # set up an expectation
+        savon.expects(:confirm_document).with(expected_options).returns(response_document)
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        response = client.confirm_document do |op|
+          op.options(options)
+          op.call
+        end
+
+        expect(response).to(be_success)
+        expect(response.result).to(eq(true))
+      end
+
+      it "異常系" do
+        # set up an expectation
+        savon.expects(:confirm_document).with(expected_options).returns({ code: 500, headers: {}, body: soap_fault })
+
+        # call the service
+        client = JxClient.new(jx_version: 2007, jx_message_id_generate: jx_message_id_generate)
+        expect(-> { client.confirm_document.options(options).call }).to(raise_error(Savon::SOAPFault))
+      end
     end
   end
 end
