@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- cf. https://www.jisa.or.jp/jiedia/tabid/2822/Default.aspx -->
 <!-- JX 手順 WSDL 2008 年 3 月版 -->
 <definitions
         xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"

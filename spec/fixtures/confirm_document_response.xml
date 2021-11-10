@@ -3,6 +3,7 @@
         xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <!-- cf. https://www.jisa.or.jp/jiedia/tabid/2822/Default.aspx -->
     <soap:Header>
         <MessageHeader xmlns="http://www.dsri.jp/edi-bp/2004/jedicos-xml/client-server">
             <From>svruri.co.jp</From>
