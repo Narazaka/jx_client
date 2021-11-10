@@ -10,6 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "EDI用JX手順クライアント"
   spec.homepage      = "https://github.com/Narazaka/jx_client"
+  spec.license       = "Zlib"
   spec.required_ruby_version = ">= 2.6.0"
 
   spec.metadata["homepage_uri"] = spec.homepage

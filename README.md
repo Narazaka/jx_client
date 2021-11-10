@@ -99,3 +99,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/Narazaka/jx_client.
+
+## License
+
+This is released under [Zlib License](LICENSE).
