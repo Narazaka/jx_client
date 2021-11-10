@@ -16,3 +16,5 @@ gem "pry", "~> 0.14.1"
 gem "rubocop-shopify", "~> 2.3.0"
 gem "rubocop-rspec", "~> 2.6.0"
 gem "rubocop-rake", "~> 0.6.0"
+
+gem "simplecov", "~> 0.21.2"

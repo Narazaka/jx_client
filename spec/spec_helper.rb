@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require "simplecov"
+SimpleCov.start do
+  add_filter(/spec_helper\.rb$/)
+end
+
 require "jx_client"
 
 RSpec.configure do |config|
